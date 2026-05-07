@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>JobZone Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"/>
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --card: #161d2e;
+    --border: #1e2d45;
+    --accent: #f59e0b;
+    --accent2: #3b82f6;
+    --accent3: #10b981;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
+
+  /* LOGIN PAGE */
+  .login-page {
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:2rem;
+    background: radial-gradient(ellipse at 50% 0%, rgba(245,158,11,0.08) 0%, transparent 60%);
+  }
+  .login-box {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:2.5rem;
+    width:100%; max-width:400px;
+    text-align:center;
+  }
+  .login-icon { font-size:3rem; margin-bottom:1rem; }
+  .login-title { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:700; margin-bottom:0.4rem; }
+  .login-sub { color:var(--muted); font-size:0.85rem; margin-bottom:2rem; }
+  .form-group { text-align:left; margin-bottom:1.2rem; }
+  .form-group label { font-size:0.8rem; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; display:block; margin-bottom:0.5rem; }
+  .form-group input {
+    width:100%;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px 14px;
+    color:var(--text);
+    font-family:'DM Sans',sans-serif;
+    font-size:0.9rem;
+    outline:none;
+    transition:border 0.2s;
+  }
+  .form-group input:focus { border-color:var(--accent); }
+  .login-btn {
+    width:100%;
+    background:var(--accent);
+    border:none;
+    border-radius:10px;
+    padding:13px;
+    color:#000;
+    font-weight:700;
+    font-size:1rem;
+    cursor:pointer;
+    transition:opacity 0.2s;
+    margin-top:0.5rem;
+  }
+  .login-btn:hover { opacity:0.85; }
+  .login-error { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:10px; color:var(--red); font-size:0.83rem; margin-bottom:1rem; display:none; }
+  .login-hint { margin-top:1.2rem; font-size:0.78rem; color:var(--muted); background:var(--surface); border-radius:8px; padding:10px; }
+
+  /* ADMIN LAYOUT */
+  .admin-layout { display:none; min-height:100vh; }
+  .admin-sidebar {
+    width:240px;
+    background:var(--surface);
+    border-right:1px solid var(--border);
+    position:fixed; top:0; left:0; bottom:0;
+    display:flex; flex-direction:column;
+    z-index:10;
+    transition:transform 0.3s;
+  }
+  .sidebar-logo {
+    padding:1.5rem;
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:10px;
+  }
+  .sidebar-logo-icon { width:34px; height:34px; background:linear-gradient(135deg,var(--accent),#f97316); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; }
+  .sidebar-logo-text { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:900; }
+  .sidebar-logo-text span { color:var(--accent); }
+  .sidebar-badge { font-size:0.65rem; background:var(--accent); color:#000; padding:2px 7px; border-radius:4px; margin-left:auto; font-weight:700; }
+  .sidebar-nav { flex:1; padding:1rem 0.75rem; }
+  .nav-section { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); padding:0 0.75rem; margin:1rem 0 0.5rem; }
+  .nav-item {
+    display:flex; align-items:center; gap:10px;
+    padding:10px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    color:var(--muted);
+    font-size:0.88rem;
+    font-weight:500;
+    transition:all 0.2s;
+    text-decoration:none;
+  }
+  .nav-item:hover, .nav-item.active { background:rgba(245,158,11,0.1); color:var(--accent); }
+  .nav-item.active { font-weight:600; }
+  .nav-item-icon { font-size:16px; width:20px; text-align:center; }
+  .sidebar-bottom { padding:1rem; border-top:1px solid var(--border); }
+  .user-card { display:flex; align-items:center; gap:10px; }
+  .user-avatar { width:34px; height:34px; background:linear-gradient(135deg,var(--accent2),var(--purple)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; }
+  .user-info { flex:1; }
+  .user-name { font-size:0.82rem; font-weight:600; }
+  .user-role { font-size:0.72rem; color:var(--muted); }
+  .logout-btn { background:none; border:none; color:var(--muted); cursor:pointer; font-size:16px; transition:color 0.2s; }
+  .logout-btn:hover { color:var(--red); }
+
+  /* MAIN CONTENT */
+  .admin-main { margin-left:240px; padding:2rem; min-height:100vh; }
+  .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; }
+  .page-title { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:700; }
+  .page-subtitle { color:var(--muted); font-size:0.85rem; margin-top:0.2rem; }
+  .header-actions { display:flex; gap:10px; }
+
+  /* STATS */
+  .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:2rem; }
+  .stat-card {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:1.2rem;
+    position:relative;
+    overflow:hidden;
+  }
+  .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+  .stat-card.s1::before { background:var(--accent); }
+  .stat-card.s2::before { background:var(--accent2); }
+  .stat-card.s3::before { background:var(--accent3); }
+  .stat-card.s4::before { background:var(--purple); }
+  .stat-label { font-size:0.75rem; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem; }
+  .stat-value { font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; }
+  .stat-sub { font-size:0.75rem; color:var(--muted); margin-top:0.2rem; }
+
+  /* BUTTONS */
+  .btn { display:inline-flex; align-items:center; gap:7px; padding:10px 18px; border-radius:10px; font-size:0.85rem; font-weight:600; cursor:pointer; border:none; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
+  .btn-primary { background:var(--accent); color:#000; }
+  .btn-primary:hover { opacity:0.85; }
+  .btn-secondary { background:var(--surface); border:1px solid var(--border); color:var(--text); }
+  .btn-secondary:hover { border-color:var(--accent); color:var(--accent); }
+  .btn-danger { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); color:var(--red); }
+  .btn-danger:hover { background:rgba(239,68,68,0.2); }
+  .btn-sm { padding:7px 13px; font-size:0.78rem; }
+
+  /* BLOG TABLE */
+  .table-card { background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+  .table-header { padding:1.2rem 1.5rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .table-title { font-weight:600; font-size:0.95rem; }
+  .table-search input {
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:8px 14px;
+    color:var(--text);
+    font-size:0.82rem;
+    font-family:'DM Sans',sans-serif;
+    outline:none;
+    width:200px;
+  }
+  table { width:100%; border-collapse:collapse; }
+  thead th { padding:12px 16px; text-align:left; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); background:var(--surface); }
+  tbody tr { border-top:1px solid var(--border); transition:background 0.15s; }
+  tbody tr:hover { background:rgba(255,255,255,0.02); }
+  tbody td { padding:12px 16px; font-size:0.85rem; vertical-align:middle; }
+  .cat-badge { display:inline-flex; align-items:center; gap:5px; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; padding:3px 9px; border-radius:5px; }
+  .blog-title-cell { font-weight:600; max-width:280px; }
+  .blog-title-cell p { font-size:0.75rem; color:var(--muted); margin-top:2px; font-weight:400; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:260px; }
+  .action-btns { display:flex; gap:6px; }
+  .empty-state { text-align:center; padding:3rem; color:var(--muted); }
+  .empty-state .icon { font-size:2.5rem; margin-bottom:0.8rem; }
+
+  /* MODAL / EDITOR */
+  .editor-overlay {
+    position:fixed; inset:0; z-index:200;
+    background:rgba(0,0,0,0.85);
+    backdrop-filter:blur(8px);
+    display:none; align-items:flex-start; justify-content:center;
+    padding:1rem;
+    overflow-y:auto;
+  }
+  .editor-overlay.open { display:flex; }
+  .editor-modal {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    width:100%; max-width:900px;
+    margin:auto;
+    overflow:hidden;
+    animation:slideUp 0.3s ease;
+  }
+  @keyframes slideUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+  .editor-header { padding:1.2rem 1.5rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .editor-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; }
+  .editor-body { padding:1.5rem; }
+  .field-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+  .field { margin-bottom:1rem; }
+  .field label { font-size:0.78rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; display:block; margin-bottom:0.5rem; }
+  .field input, .field select, .field textarea {
+    width:100%;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:11px 14px;
+    color:var(--text);
+    font-family:'DM Sans',sans-serif;
+    font-size:0.88rem;
+    outline:none;
+    transition:border 0.2s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color:var(--accent); }
+  .field select option { background:var(--surface); }
+  .field textarea { resize:vertical; min-height:70px; }
+  .quill-label { font-size:0.78rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem; }
+  #editor-container {
+    background:var(--surface);
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid var(--border);
+    margin-bottom:1rem;
+  }
+  .ql-toolbar { background:var(--card) !important; border-color:var(--border) !important; }
+  .ql-container { background:var(--surface) !important; border-color:var(--border) !important; min-height:200px; }
+  .ql-editor { color:var(--text) !important; font-family:'DM Sans',sans-serif !important; font-size:0.9rem !important; min-height:200px; }
+  .ql-snow .ql-stroke { stroke:var(--muted) !important; }
+  .ql-snow .ql-fill { fill:var(--muted) !important; }
+  .ql-snow .ql-picker { color:var(--muted) !important; }
+  .ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow.ql-toolbar button.ql-active .ql-stroke { stroke:var(--accent) !important; }
+  .ql-snow.ql-toolbar button:hover .ql-fill, .ql-snow.ql-toolbar button.ql-active .ql-fill { fill:var(--accent) !important; }
+  .editor-footer { padding:1rem 1.5rem; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:flex-end; gap:10px; }
+  .toggle-row { display:flex; align-items:center; gap:10px; margin-bottom:1rem; }
+  .toggle-group { display:flex; align-items:center; gap:8px; font-size:0.85rem; color:var(--muted); }
+  .toggle { position:relative; width:38px; height:20px; }
+  .toggle input { opacity:0; width:0; height:0; }
+  .slider { position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background:var(--border); border-radius:20px; transition:0.3s; }
+  .slider::before { position:absolute; content:''; height:14px; width:14px; left:3px; bottom:3px; background:#fff; border-radius:50%; transition:0.3s; }
+  .toggle input:checked + .slider { background:var(--accent); }
+  .toggle input:checked + .slider::before { transform:translateX(18px); }
+
+  /* TOAST */
+  .toast {
+    position:fixed; bottom:2rem; right:2rem; z-index:999;
+    background:var(--accent3); color:#fff;
+    padding:12px 20px; border-radius:12px;
+    font-size:0.88rem; font-weight:600;
+    display:none; align-items:center; gap:8px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.4);
+    animation:toastIn 0.3s ease;
+  }
+  @keyframes toastIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  /* PAGES */
+  .page { display:none; }
+  .page.active { display:block; }
+
+  /* RESPONSIVE */
+  @media (max-width:768px) {
+    .admin-sidebar { transform:translateX(-100%); }
+    .admin-sidebar.open { transform:translateX(0); }
+    .admin-main { margin-left:0; padding:1rem; }
+    .stats-grid { grid-template-columns:1fr 1fr; }
+    .field-row { grid-template-columns:1fr; }
+    .mobile-menu-btn { display:flex !important; }
+  }
+  .mobile-menu-btn {
+    display:none;
+    align-items:center; gap:8px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:8px 12px;
+    color:var(--text);
+    cursor:pointer;
+    font-size:0.85rem;
+  }
+  .mobile-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9; }
+  .mobile-overlay.open { display:block; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div class="login-page" id="loginPage">
+  <div class="login-box">
+    <div class="login-icon">🔐</div>
+    <div class="login-title">Admin Panel</div>
+    <div class="login-sub">JobZone India — Secure Access</div>
+    <div class="login-error" id="loginError">❌ Invalid credentials. Please try again.</div>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="Enter username" onkeydown="if(event.key==='Enter') doLogin()"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="Enter password" onkeydown="if(event.key==='Enter') doLogin()"/>
+    </div>
+    <button class="login-btn" onclick="doLogin()">Login to Dashboard →</button>
+    <div class="login-hint">🔑 Demo: <strong>admin</strong> / <strong>admin123</strong></div>
+  </div>
+</div>
+
+<!-- MOBILE OVERLAY -->
+<div class="mobile-overlay" id="mobileOverlay" onclick="closeSidebar()"></div>
+
+<!-- ADMIN LAYOUT -->
+<div class="admin-layout" id="adminLayout">
+
+  <!-- SIDEBAR -->
+  <div class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">🎯</div>
+      <span class="sidebar-logo-text">Job<span>Zone</span></span>
+      <span class="sidebar-badge">ADMIN</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Main</div>
+      <div class="nav-item active" onclick="showPage('dashboard', this)"><span class="nav-item-icon">📊</span>Dashboard</div>
+      <div class="nav-item" onclick="showPage('blogs', this)"><span class="nav-item-icon">📝</span>All Blogs</div>
+      <div class="nav-item" onclick="openEditor(null)"><span class="nav-item-icon">➕</span>New Blog</div>
+      <div class="nav-section">Management</div>
+      <div class="nav-item" onclick="showPage('categories', this)"><span class="nav-item-icon">🏷️</span>Categories</div>
+      <div class="nav-section">Site</div>
+      <a class="nav-item" href="index.html" target="_blank"><span class="nav-item-icon">🌐</span>View Website</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="user-card">
+        <div class="user-avatar">A</div>
+        <div class="user-info">
+          <div class="user-name">Administrator</div>
+          <div class="user-role">Super Admin</div>
+        </div>
+        <button class="logout-btn" onclick="doLogout()" title="Logout">⏻</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:1.5rem;">
+      <button class="mobile-menu-btn" onclick="openSidebar()">☰ Menu</button>
+    </div>
+
+    <!-- DASHBOARD PAGE -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-subtitle">Welcome back! Here's what's happening.</div>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" onclick="openEditor(null)">✏️ New Blog</button>
+          <a class="btn btn-secondary" href="index.html" target="_blank">🌐 View Site</a>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card s1">
+          <div class="stat-label">Total Blogs</div>
+          <div class="stat-value" id="statTotal">—</div>
+          <div class="stat-sub">All categories</div>
+        </div>
+        <div class="stat-card s2">
+          <div class="stat-label">Jobs</div>
+          <div class="stat-value" id="statJobs">—</div>
+          <div class="stat-sub">Active listings</div>
+        </div>
+        <div class="stat-card s3">
+          <div class="stat-label">Results</div>
+          <div class="stat-value" id="statResults">—</div>
+          <div class="stat-sub">Declared</div>
+        </div>
+        <div class="stat-card s4">
+          <div class="stat-label">Admit Cards</div>
+          <div class="stat-value" id="statAdmit">—</div>
+          <div class="stat-sub">Available</div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Recent Blogs</div>
+          <button class="btn btn-sm btn-primary" onclick="showPage('blogs', document.querySelector('.nav-item:nth-child(3))'))">View All</button>
+        </div>
+        <div id="recentTable"></div>
+      </div>
+    </div>
+
+    <!-- BLOGS PAGE -->
+    <div class="page" id="page-blogs">
+      <div class="page-header">
+        <div>
+          <div class="page-title">All Blogs</div>
+          <div class="page-subtitle">Manage all your blog posts</div>
+        </div>
+        <button class="btn btn-primary" onclick="openEditor(null)">✏️ New Blog</button>
+      </div>
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Blog Posts</div>
+          <div class="table-search"><input type="text" placeholder="Search blogs..." id="adminSearch" oninput="renderAdminTable()"/></div>
+        </div>
+        <div id="adminTable"></div>
+      </div>
+    </div>
+
+    <!-- CATEGORIES PAGE -->
+    <div class="page" id="page-categories">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Categories</div>
+          <div class="page-subtitle">Blog categories overview</div>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem;" id="catGrid"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BLOG EDITOR MODAL -->
+<div class="editor-overlay" id="editorOverlay">
+  <div class="editor-modal">
+    <div class="editor-header">
+      <div class="editor-title" id="editorModalTitle">✏️ New Blog Post</div>
+      <button class="btn btn-secondary btn-sm" onclick="closeEditor()">✕ Close</button>
+    </div>
+    <div class="editor-body">
+      <input type="hidden" id="editId"/>
+      <div class="field-row">
+        <div class="field">
+          <label>Blog Title *</label>
+          <input type="text" id="editTitle" placeholder="Enter blog title..."/>
+        </div>
+        <div class="field">
+          <label>Category *</label>
+          <select id="editCat">
+            <option value="jobs">💼 Latest Jobs</option>
+            <option value="results">📊 Results</option>
+            <option value="admit">🪪 Admit Card</option>
+            <option value="syllabus">📚 Syllabus</option>
+            <option value="answer">🔑 Answer Key</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Emoji Icon</label>
+          <input type="text" id="editEmoji" placeholder="e.g. 💼" maxlength="4"/>
+        </div>
+        <div class="field">
+          <label>Read Time</label>
+          <input type="text" id="editReadTime" placeholder="e.g. 5 min"/>
+        </div>
+      </div>
+      <div class="field">
+        <label>Short Excerpt *</label>
+        <textarea id="editExcerpt" placeholder="Brief description shown in blog card (1-2 sentences)..."></textarea>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-group">
+          <label class="toggle"><input type="checkbox" id="editHot"/><span class="slider"></span></label>
+          🔥 Mark as Hot
+        </div>
+        <div class="toggle-group">
+          <label class="toggle"><input type="checkbox" id="editNew"/><span class="slider"></span></label>
+          ✨ Mark as New
+        </div>
+      </div>
+      <div class="quill-label">Full Content (Rich Editor) *</div>
+      <div id="editor-container">
+        <div id="quill-editor"></div>
+      </div>
+    </div>
+    <div class="editor-footer">
+      <button class="btn btn-secondary" onclick="closeEditor()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveBlog()">💾 Save Blog Post</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== AUTH =====
+const CREDS = { user: 'admin', pass: 'admin123' };
+let quill;
+
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value.trim();
+  if (u === CREDS.user && p === CREDS.pass) {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('adminLayout').style.display = 'flex';
+    initQuill();
+    refreshDashboard();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+
+function doLogout() {
+  document.getElementById('loginPage').style.display = 'flex';
+  document.getElementById('adminLayout').style.display = 'none';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+}
+
+// ===== BLOG DATA =====
+const catMap = {
+  jobs: { label:'Latest Jobs', class:'cat-jobs', color:'rgba(59,130,246,0.15)', tc:'#3b82f6' },
+  results: { label:'Results', class:'cat-results', color:'rgba(16,185,129,0.15)', tc:'#10b981' },
+  admit: { label:'Admit Card', class:'cat-admit', color:'rgba(139,92,246,0.15)', tc:'#8b5cf6' },
+  syllabus: { label:'Syllabus', class:'cat-syllabus', color:'rgba(239,68,68,0.15)', tc:'#ef4444' },
+  answer: { label:'Answer Key', class:'cat-answer', color:'rgba(245,158,11,0.15)', tc:'#f59e0b' },
+};
+
+function getUserBlogs() {
+  const s = localStorage.getItem('jz_blogs');
+  return s ? JSON.parse(s) : [];
+}
+function saveUserBlogs(blogs) {
+  localStorage.setItem('jz_blogs', JSON.stringify(blogs));
+}
+
+function getNextId() {
+  const all = getUserBlogs();
+  return all.length ? Math.max(...all.map(b=>b.id)) + 1 : 100;
+}
+
+// ===== QUILL =====
+function initQuill() {
+  if (quill) return;
+  quill = new Quill('#quill-editor', {
+    theme: 'snow',
+    modules: {
+      toolbar: [
+        [{ header: [1,2,3,false] }],
+        ['bold','italic','underline','strike'],
+        [{ color:[] },{ background:[] }],
+        [{ list:'ordered' },{ list:'bullet' }],
+        [{ align:[] }],
+        ['link','image'],
+        ['blockquote','code-block'],
+        ['table'],
+        ['clean']
+      ]
+    },
+    placeholder: 'Write your full blog content here. Use headings, bullet points, tables, and images...'
+  });
+}
+
+// ===== PAGES =====
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  if (name === 'dashboard') refreshDashboard();
+  if (name === 'blogs') renderAdminTable();
+  if (name === 'categories') renderCategories();
+  closeSidebar();
+}
+
+// ===== DASHBOARD =====
+function refreshDashboard() {
+  const blogs = getUserBlogs();
+  document.getElementById('statTotal').textContent = blogs.length + 8; // include defaults
+  document.getElementById('statJobs').textContent = blogs.filter(b=>b.cat==='jobs').length + 2;
+  document.getElementById('statResults').textContent = blogs.filter(b=>b.cat==='results').length + 2;
+  document.getElementById('statAdmit').textContent = blogs.filter(b=>b.cat==='admit').length + 2;
+  const recent = [...blogs].reverse().slice(0,5);
+  const html = recent.length ? `
+    <table>
+      <thead><tr><th>Title</th><th>Category</th><th>Date</th><th>Actions</th></tr></thead>
+      <tbody>${recent.map(b=>`
+        <tr>
+          <td class="blog-title-cell">${b.title}<p>${b.excerpt}</p></td>
+          <td><span class="cat-badge ${catMap[b.cat]?.class||'cat-jobs'}" style="background:${catMap[b.cat]?.color};color:${catMap[b.cat]?.tc}">${catMap[b.cat]?.label||b.cat}</span></td>
+          <td>${b.date}</td>
+          <td><div class="action-btns"><button class="btn btn-sm btn-secondary" onclick="openEditor(${b.id})">✏️</button><button class="btn btn-sm btn-danger" onclick="deleteBlog(${b.id})">🗑</button></div></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  ` : '<div class="empty-state"><div class="icon">📝</div><p>No custom blogs yet. Click "New Blog" to create one!</p></div>';
+  document.getElementById('recentTable').innerHTML = html;
+}
+
+// ===== ADMIN TABLE =====
+function renderAdminTable() {
+  const q = (document.getElementById('adminSearch')?.value||'').toLowerCase();
+  const blogs = getUserBlogs().filter(b =>
+    !q || b.title.toLowerCase().includes(q) || b.excerpt.toLowerCase().includes(q)
+  );
+  const html = blogs.length ? `
+    <table>
+      <thead><tr><th>#</th><th>Title</th><th>Category</th><th>Date</th><th>Hot</th><th>Actions</th></tr></thead>
+      <tbody>${[...blogs].reverse().map((b,i)=>`
+        <tr>
+          <td style="color:var(--muted);font-size:0.8rem">${i+1}</td>
+          <td class="blog-title-cell">${b.emoji||''} ${b.title}<p>${b.excerpt}</p></td>
+          <td><span class="cat-badge ${catMap[b.cat]?.class||'cat-jobs'}" style="background:${catMap[b.cat]?.color};color:${catMap[b.cat]?.tc}">${catMap[b.cat]?.label||b.cat}</span></td>
+          <td style="font-size:0.8rem;color:var(--muted)">${b.date}</td>
+          <td>${b.hot?'🔥':b.isNew?'✨':'—'}</td>
+          <td><div class="action-btns"><button class="btn btn-sm btn-secondary" onclick="openEditor(${b.id})">✏️ Edit</button><button class="btn btn-sm btn-danger" onclick="deleteBlog(${b.id})">🗑</button></div></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  ` : '<div class="empty-state"><div class="icon">📝</div><p>No blogs found.</p></div>';
+  document.getElementById('adminTable').innerHTML = html;
+}
+
+// ===== CATEGORIES =====
+function renderCategories() {
+  const blogs = getUserBlogs();
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = Object.entries(catMap).map(([k,v])=>`
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.3rem;border-top:3px solid ${v.tc}">
+      <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);margin-bottom:0.5rem">${v.label}</div>
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:${v.tc}">${blogs.filter(b=>b.cat===k).length}</div>
+      <div style="font-size:0.75rem;color:var(--muted)">Custom posts</div>
+    </div>
+  `).join('');
+}
+
+// ===== EDITOR =====
+let editingId = null;
+
+function openEditor(id) {
+  editingId = id;
+  const overlay = document.getElementById('editorOverlay');
+  if (id) {
+    const blog = getUserBlogs().find(b=>b.id==id);
+    if (!blog) return;
+    document.getElementById('editorModalTitle').textContent = '✏️ Edit Blog Post';
+    document.getElementById('editId').value = blog.id;
+    document.getElementById('editTitle').value = blog.title;
+    document.getElementById('editCat').value = blog.cat;
+    document.getElementById('editEmoji').value = blog.emoji||'';
+    document.getElementById('editReadTime').value = blog.readTime||'3 min';
+    document.getElementById('editExcerpt').value = blog.excerpt;
+    document.getElementById('editHot').checked = !!blog.hot;
+    document.getElementById('editNew').checked = !!blog.isNew;
+    if (quill) quill.root.innerHTML = blog.content||'';
+  } else {
+    document.getElementById('editorModalTitle').textContent = '✏️ New Blog Post';
+    document.getElementById('editId').value = '';
+    document.getElementById('editTitle').value = '';
+    document.getElementById('editCat').value = 'jobs';
+    document.getElementById('editEmoji').value = '💼';
+    document.getElementById('editReadTime').value = '3 min';
+    document.getElementById('editExcerpt').value = '';
+    document.getElementById('editHot').checked = false;
+    document.getElementById('editNew').checked = true;
+    if (quill) quill.root.innerHTML = '';
+  }
+  overlay.classList.add('open');
+}
+
+function closeEditor() {
+  document.getElementById('editorOverlay').classList.remove('open');
+}
+
+function saveBlog() {
+  const title = document.getElementById('editTitle').value.trim();
+  const cat = document.getElementById('editCat').value;
+  const excerpt = document.getElementById('editExcerpt').value.trim();
+  if (!title || !excerpt) { showToast('❌ Title and excerpt are required!', '#ef4444'); return; }
+  const content = quill ? quill.root.innerHTML : '';
+  const blogs = getUserBlogs();
+  const idVal = document.getElementById('editId').value;
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+  if (idVal) {
+    const idx = blogs.findIndex(b=>b.id==idVal);
+    if (idx > -1) {
+      blogs[idx] = { ...blogs[idx], title, cat, catLabel:catMap[cat].label, emoji:document.getElementById('editEmoji').value||'📄', readTime:document.getElementById('editReadTime').value||'3 min', excerpt, content, hot:document.getElementById('editHot').checked, isNew:document.getElementById('editNew').checked };
+    }
+  } else {
+    blogs.push({ id:getNextId(), title, cat, catLabel:catMap[cat].label, emoji:document.getElementById('editEmoji').value||'📄', readTime:document.getElementById('editReadTime').value||'3 min', excerpt, content, hot:document.getElementById('editHot').checked, isNew:document.getElementById('editNew').checked, date:dateStr, author:'Admin' });
+  }
+  saveUserBlogs(blogs);
+  closeEditor();
+  showToast('✅ Blog saved successfully!');
+  refreshDashboard();
+  renderAdminTable();
+}
+
+function deleteBlog(id) {
+  if (!confirm('Delete this blog post?')) return;
+  const blogs = getUserBlogs().filter(b=>b.id!=id);
+  saveUserBlogs(blogs);
+  showToast('🗑 Blog deleted!', '#ef4444');
+  refreshDashboard();
+  renderAdminTable();
+}
+
+// ===== TOAST =====
+function showToast(msg, color='#10b981') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = color;
+  t.style.display = 'flex';
+  setTimeout(()=>{ t.style.display='none'; }, 3000);
+}
+
+// ===== MOBILE SIDEBAR =====
+function openSidebar() { document.getElementById('adminSidebar').classList.add('open'); document.getElementById('mobileOverlay').classList.add('open'); }
+function closeSidebar() { document.getElementById('adminSidebar').classList.remove('open'); document.getElementById('mobileOverlay').classList.remove('open'); }
+</script>
+</body>
+</html>

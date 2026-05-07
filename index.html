@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>JobZone India – Latest Jobs, Results & Admit Cards</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --card: #161d2e;
+    --border: #1e2d45;
+    --accent: #f59e0b;
+    --accent2: #3b82f6;
+    --accent3: #10b981;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events:none;
+    z-index:0;
+    opacity:0.4;
+  }
+
+  /* HEADER */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,14,26,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+  }
+  .header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--accent), #f97316);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--text);
+  }
+  .logo-text span { color: var(--accent); }
+  nav { display: flex; gap: 2rem; align-items: center; }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--accent); }
+  .admin-btn {
+    background: var(--accent);
+    color: #000 !important;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    transition: opacity 0.2s !important;
+  }
+  .admin-btn:hover { opacity: 0.85; }
+  .hamburger { display:none; cursor:pointer; flex-direction:column; gap:5px; }
+  .hamburger span { width:24px; height:2px; background:var(--text); border-radius:2px; transition:0.3s; }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    padding: 90px 2rem 70px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero-glow {
+    position: absolute;
+    top: -100px; left: 50%; transform: translateX(-50%);
+    width: 700px; height: 400px;
+    background: radial-gradient(ellipse, rgba(245,158,11,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.3);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 1.2rem;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent), #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* SEARCH BAR */
+  .search-wrap {
+    max-width: 620px;
+    margin: 0 auto 2rem;
+    position: relative;
+    animation: fadeUp 0.6s 0.25s ease both;
+  }
+  .search-wrap input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 60px 16px 50px;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .search-wrap input:focus { border-color: var(--accent); }
+  .search-wrap input::placeholder { color: var(--muted); }
+  .search-icon { position:absolute; left:17px; top:50%; transform:translateY(-50%); font-size:18px; color:var(--muted); }
+  .search-btn {
+    position:absolute; right:10px; top:50%; transform:translateY(-50%);
+    background:var(--accent); border:none; border-radius:10px;
+    padding:8px 14px; color:#000; font-weight:600; cursor:pointer;
+    font-size:0.82rem; transition:opacity 0.2s;
+  }
+  .search-btn:hover { opacity:0.85; }
+
+  /* FILTERS */
+  .filters-section { padding: 0 2rem 2.5rem; }
+  .filters-inner { max-width: 1280px; margin: 0 auto; }
+  .filters-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 1rem; font-weight: 600; }
+  .filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .pill:hover { border-color: var(--accent); color: var(--accent); }
+  .pill.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: 600;
+  }
+  .pill-dot { width:7px; height:7px; border-radius:50%; background:currentColor; }
+
+  /* MAIN LAYOUT */
+  .main { max-width: 1280px; margin: 0 auto; padding: 0 2rem 4rem; display:grid; grid-template-columns: 1fr 340px; gap: 2.5rem; }
+  
+  /* BLOG GRID */
+  .section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; }
+  .section-title { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:700; }
+  .count-badge { background:var(--surface); border:1px solid var(--border); border-radius:100px; padding:4px 12px; font-size:0.8rem; color:var(--muted); }
+  .blog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  
+  .blog-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    animation: fadeUp 0.5s ease both;
+    position: relative;
+  }
+  .blog-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(245,158,11,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(245,158,11,0.1);
+  }
+  .blog-card.featured { grid-column: 1/-1; display:grid; grid-template-columns: 1.2fr 1fr; }
+  .card-img {
+    width:100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display:block;
+    background: linear-gradient(135deg, #1e2d45 0%, #0a1628 100%);
+    position:relative;
+    overflow:hidden;
+  }
+  .card-img-placeholder {
+    width:100%; height:100%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:3rem;
+    min-height: 180px;
+  }
+  .featured .card-img { aspect-ratio: auto; min-height: 260px; }
+  .card-body { padding: 1.3rem; }
+  .featured .card-body { padding: 2rem; display:flex; flex-direction:column; justify-content:center; }
+  .card-cat {
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em;
+    padding:4px 10px; border-radius:6px; margin-bottom:0.8rem;
+  }
+  .cat-jobs { background:rgba(59,130,246,0.15); color:var(--accent2); }
+  .cat-results { background:rgba(16,185,129,0.15); color:var(--accent3); }
+  .cat-admit { background:rgba(139,92,246,0.15); color:var(--purple); }
+  .cat-syllabus { background:rgba(239,68,68,0.15); color:var(--red); }
+  .cat-answer { background:rgba(245,158,11,0.15); color:var(--accent); }
+  .card-title {
+    font-family:'Playfair Display',serif;
+    font-size:1.05rem;
+    font-weight:700;
+    line-height:1.35;
+    color:var(--text);
+    margin-bottom:0.6rem;
+  }
+  .featured .card-title { font-size:1.5rem; }
+  .card-excerpt { font-size:0.83rem; color:var(--muted); line-height:1.6; margin-bottom:1rem; }
+  .card-footer { display:flex; align-items:center; justify-content:space-between; }
+  .card-meta { font-size:0.75rem; color:var(--muted); }
+  .card-meta strong { color:var(--text); }
+  .read-btn {
+    display:inline-flex; align-items:center; gap:6px;
+    background: rgba(245,158,11,0.1);
+    border:1px solid rgba(245,158,11,0.25);
+    color:var(--accent);
+    padding:7px 14px;
+    border-radius:8px;
+    font-size:0.8rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:all 0.2s;
+    text-decoration:none;
+  }
+  .read-btn:hover { background:var(--accent); color:#000; }
+  .hot-badge {
+    position:absolute; top:12px; right:12px;
+    background: var(--red);
+    color:#fff;
+    font-size:0.65rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    padding:3px 8px;
+    border-radius:5px;
+  }
+  .new-badge {
+    position:absolute; top:12px; right:12px;
+    background: var(--accent3);
+    color:#fff;
+    font-size:0.65rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    padding:3px 8px;
+    border-radius:5px;
+  }
+
+  /* SIDEBAR */
+  .sidebar { display:flex; flex-direction:column; gap:1.5rem; }
+  .sidebar-card {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:1.3rem;
+  }
+  .sidebar-title {
+    font-size:0.85rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--muted);
+    margin-bottom:1rem;
+    display:flex; align-items:center; gap:8px;
+  }
+  .sidebar-title::before { content:''; width:3px; height:14px; background:var(--accent); border-radius:2px; }
+
+  .deadline-item { padding:0.8rem 0; border-bottom:1px solid var(--border); display:flex; gap:10px; }
+  .deadline-item:last-child { border-bottom:none; padding-bottom:0; }
+  .deadline-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+  .deadline-info { flex:1; }
+  .deadline-org { font-size:0.78rem; font-weight:600; color:var(--text); }
+  .deadline-date { font-size:0.72rem; color:var(--muted); margin-top:2px; }
+  .deadline-tag { font-size:0.65rem; font-weight:700; padding:2px 7px; border-radius:4px; margin-top:4px; display:inline-block; }
+  .tag-urgent { background:rgba(239,68,68,0.15); color:var(--red); }
+  .tag-open { background:rgba(16,185,129,0.15); color:var(--accent3); }
+
+  .quick-link {
+    display:flex; align-items:center; gap:10px;
+    padding:10px 0; border-bottom:1px solid var(--border);
+    text-decoration:none; color:var(--text);
+    font-size:0.85rem; font-weight:500;
+    transition:color 0.2s;
+    cursor:pointer;
+  }
+  .quick-link:last-child { border-bottom:none; padding-bottom:0; }
+  .quick-link:hover { color:var(--accent); }
+  .quick-link-icon { font-size:18px; }
+  .quick-link-arr { margin-left:auto; color:var(--muted); font-size:0.8rem; }
+
+  /* MODAL */
+  .modal-overlay {
+    position:fixed; inset:0; z-index:1000;
+    background:rgba(0,0,0,0.85);
+    backdrop-filter:blur(8px);
+    display:none; align-items:flex-start; justify-content:center;
+    padding:2rem;
+    overflow-y:auto;
+  }
+  .modal-overlay.open { display:flex; }
+  .modal {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:24px;
+    max-width:820px;
+    width:100%;
+    margin:auto;
+    overflow:hidden;
+    animation:modalIn 0.3s ease;
+  }
+  @keyframes modalIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .modal-header { position:relative; }
+  .modal-img { width:100%; height:260px; background:linear-gradient(135deg,#1e2d45,#0a1628); display:flex; align-items:center; justify-content:center; font-size:5rem; }
+  .modal-close {
+    position:absolute; top:16px; right:16px;
+    width:36px; height:36px;
+    background:rgba(0,0,0,0.5);
+    border:1px solid var(--border);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; color:var(--text); font-size:18px;
+    transition:background 0.2s;
+  }
+  .modal-close:hover { background:rgba(239,68,68,0.3); }
+  .modal-body { padding:2rem; }
+  .modal-cat { margin-bottom:0.8rem; }
+  .modal-title { font-family:'Playfair Display',serif; font-size:1.9rem; font-weight:700; line-height:1.25; margin-bottom:1rem; }
+  .modal-meta { display:flex; gap:1.5rem; margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+  .modal-meta span { font-size:0.8rem; color:var(--muted); display:flex; align-items:center; gap:5px; }
+  .modal-content { font-size:0.95rem; line-height:1.8; color:var(--muted); }
+  .modal-content h3 { font-family:'Playfair Display',serif; color:var(--text); font-size:1.15rem; margin:1.5rem 0 0.6rem; }
+  .modal-content ul { padding-left:1.2rem; margin-bottom:1rem; }
+  .modal-content ul li { margin-bottom:0.4rem; }
+  .modal-content table { width:100%; border-collapse:collapse; margin:1rem 0; }
+  .modal-content table th { background:var(--surface); color:var(--text); padding:10px 14px; text-align:left; font-size:0.82rem; font-weight:700; }
+  .modal-content table td { padding:10px 14px; border-bottom:1px solid var(--border); font-size:0.83rem; }
+  .apply-btn { display:inline-flex; align-items:center; gap:8px; margin-top:1.5rem; background:var(--accent); color:#000; border:none; padding:14px 28px; border-radius:12px; font-size:0.95rem; font-weight:700; cursor:pointer; transition:opacity 0.2s; }
+  .apply-btn:hover { opacity:0.85; }
+
+  /* FOOTER */
+  footer {
+    background:var(--surface);
+    border-top:1px solid var(--border);
+    padding:3rem 2rem 2rem;
+    margin-top:2rem;
+  }
+  .footer-inner { max-width:1280px; margin:0 auto; }
+  .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:2rem; margin-bottom:2rem; }
+  .footer-brand p { color:var(--muted); font-size:0.85rem; line-height:1.7; margin-top:0.8rem; }
+  .footer-col h4 { font-size:0.8rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:0.8rem; }
+  .footer-col a { display:block; color:var(--text); text-decoration:none; font-size:0.85rem; margin-bottom:0.4rem; transition:color 0.2s; }
+  .footer-col a:hover { color:var(--accent); }
+  .footer-bottom { border-top:1px solid var(--border); padding-top:1.5rem; display:flex; align-items:center; justify-content:space-between; }
+  .footer-bottom p { font-size:0.8rem; color:var(--muted); }
+
+  /* TICKER */
+  .ticker-wrap {
+    background:var(--accent);
+    padding:8px 0;
+    overflow:hidden;
+    white-space:nowrap;
+  }
+  .ticker {
+    display:inline-block;
+    animation:ticker 30s linear infinite;
+    font-size:0.8rem;
+    font-weight:600;
+    color:#000;
+    letter-spacing:0.02em;
+  }
+  @keyframes ticker { from { transform:translateX(100vw); } to { transform:translateX(-100%); } }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+
+  /* RESPONSIVE */
+  @media (max-width:1024px) {
+    .main { grid-template-columns:1fr; }
+    .sidebar { display:grid; grid-template-columns:1fr 1fr; }
+    .blog-grid { grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:768px) {
+    .blog-card.featured { grid-column:1; display:block; }
+    .blog-grid { grid-template-columns:1fr; }
+    .sidebar { grid-template-columns:1fr; }
+    .stats-row { gap:1.5rem; }
+    nav { display:none; }
+    .hamburger { display:flex; }
+    .footer-grid { grid-template-columns:1fr 1fr; }
+    .hero { padding:60px 1.5rem 50px; }
+    .main { padding:0 1rem 3rem; }
+    .filters-section { padding:0 1rem 2rem; }
+    header { padding:0 1rem; }
+  }
+  @media (max-width:480px) {
+    .footer-grid { grid-template-columns:1fr; }
+    .modal-body { padding:1.2rem; }
+    .modal-title { font-size:1.4rem; }
+  }
+
+  /* Mobile nav */
+  .mobile-nav {
+    display:none;
+    position:fixed; inset:0; z-index:200;
+    background:rgba(10,14,26,0.98);
+    flex-direction:column; align-items:center; justify-content:center; gap:2rem;
+  }
+  .mobile-nav.open { display:flex; }
+  .mobile-nav a { font-size:1.3rem; font-weight:600; color:var(--text); text-decoration:none; }
+  .mobile-nav-close { position:absolute; top:1.5rem; right:1.5rem; font-size:1.5rem; cursor:pointer; color:var(--text); }
+
+  /* Pagination */
+  .pagination { display:flex; gap:8px; align-items:center; margin-top:2.5rem; justify-content:center; }
+  .page-btn { width:38px; height:38px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--muted); font-size:0.85rem; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s; }
+  .page-btn.active, .page-btn:hover { background:var(--accent); border-color:var(--accent); color:#000; font-weight:700; }
+
+  /* No results */
+  .no-results { text-align:center; padding:4rem 1rem; color:var(--muted); }
+  .no-results .icon { font-size:3rem; margin-bottom:1rem; }
+  .no-results p { font-size:1rem; }
+</style>
+</head>
+<body>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <span class="mobile-nav-close" onclick="closeMobileNav()">✕</span>
+  <a href="#">Home</a>
+  <a href="#">Latest Jobs</a>
+  <a href="#">Results</a>
+  <a href="#">Admit Cards</a>
+  <a href="admin.html">Admin Panel</a>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <span class="ticker">🔥 UPSC Civil Services 2026 Notification Released &nbsp;|&nbsp; 🎯 SSC CHSL Result 2025 Declared &nbsp;|&nbsp; 📋 RRB NTPC Admit Card 2026 Available &nbsp;|&nbsp; 🏦 SBI PO 2026 Applications Open &nbsp;|&nbsp; ⚡ IBPS Clerk 2025 Final Result Out &nbsp;|&nbsp; 🎓 NTA JEE Main 2026 Session 2 Admit Card Released &nbsp;|&nbsp; 💼 India Post GDS 2026 Recruitment 44,228 Posts</span>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <div class="logo-icon">🎯</div>
+      <span class="logo-text">Job<span>Zone</span></span>
+    </a>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Latest Jobs</a>
+      <a href="#">Results</a>
+      <a href="#">Admit Cards</a>
+      <a href="#">Syllabus</a>
+      <a href="admin.html" class="admin-btn">⚙ Admin</a>
+    </nav>
+    <div class="hamburger" onclick="openMobileNav()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge">🇮🇳 India's #1 Govt Job Portal</div>
+  <h1>Find Your <em>Dream</em><br/>Government Job</h1>
+  <p>Stay updated with the latest government job notifications, admit cards, results, and answer keys — all in one place.</p>
+  
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search jobs, results, admit cards..." oninput="handleSearch(this.value)"/>
+    <button class="search-btn">Search</button>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat"><div class="stat-num">12K+</div><div class="stat-label">Active Jobs</div></div>
+    <div class="stat"><div class="stat-num">850+</div><div class="stat-label">Results Posted</div></div>
+    <div class="stat"><div class="stat-num">2.4M+</div><div class="stat-label">Monthly Readers</div></div>
+    <div class="stat"><div class="stat-num">99%</div><div class="stat-label">Accuracy</div></div>
+  </div>
+</section>
+
+<!-- FILTERS -->
+<section class="filters-section">
+  <div class="filters-inner">
+    <div class="filters-label">Filter by Category</div>
+    <div class="filter-pills" id="filterPills">
+      <div class="pill active" onclick="filterBlogs('all', this)"><span class="pill-dot"></span>All Updates</div>
+      <div class="pill" onclick="filterBlogs('jobs', this)"><span class="pill-dot"></span>Latest Jobs</div>
+      <div class="pill" onclick="filterBlogs('results', this)"><span class="pill-dot"></span>Results</div>
+      <div class="pill" onclick="filterBlogs('admit', this)"><span class="pill-dot"></span>Admit Cards</div>
+      <div class="pill" onclick="filterBlogs('syllabus', this)"><span class="pill-dot"></span>Syllabus</div>
+      <div class="pill" onclick="filterBlogs('answer', this)"><span class="pill-dot"></span>Answer Keys</div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+  <div>
+    <div class="section-header">
+      <div class="section-title">Latest Updates</div>
+      <div class="count-badge" id="countBadge">12 posts</div>
+    </div>
+    <div class="blog-grid" id="blogGrid"></div>
+    <div class="pagination">
+      <div class="page-btn active">1</div>
+      <div class="page-btn">2</div>
+      <div class="page-btn">3</div>
+      <div class="page-btn">›</div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">Upcoming Deadlines</div>
+      <div class="deadline-item">
+        <div class="deadline-icon" style="background:rgba(59,130,246,0.1)">📋</div>
+        <div class="deadline-info">
+          <div class="deadline-org">UPSC CSE 2026</div>
+          <div class="deadline-date">Last Date: 15 May 2026</div>
+          <span class="deadline-tag tag-urgent">Urgent</span>
+        </div>
+      </div>
+      <div class="deadline-item">
+        <div class="deadline-icon" style="background:rgba(16,185,129,0.1)">🏦</div>
+        <div class="deadline-info">
+          <div class="deadline-org">SBI PO 2026</div>
+          <div class="deadline-date">Last Date: 22 May 2026</div>
+          <span class="deadline-tag tag-open">Open</span>
+        </div>
+      </div>
+      <div class="deadline-item">
+        <div class="deadline-icon" style="background:rgba(245,158,11,0.1)">🚂</div>
+        <div class="deadline-info">
+          <div class="deadline-org">RRB Group D 2026</div>
+          <div class="deadline-date">Last Date: 30 May 2026</div>
+          <span class="deadline-tag tag-open">Open</span>
+        </div>
+      </div>
+      <div class="deadline-item">
+        <div class="deadline-icon" style="background:rgba(139,92,246,0.1)">💼</div>
+        <div class="deadline-info">
+          <div class="deadline-org">SSC CGL 2026</div>
+          <div class="deadline-date">Last Date: 5 Jun 2026</div>
+          <span class="deadline-tag tag-open">Open</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-title">Quick Links</div>
+      <div class="quick-link"><span class="quick-link-icon">📄</span>Download Admit Card<span class="quick-link-arr">→</span></div>
+      <div class="quick-link"><span class="quick-link-icon">📊</span>Check Result Status<span class="quick-link-arr">→</span></div>
+      <div class="quick-link"><span class="quick-link-icon">📚</span>Download Syllabus PDF<span class="quick-link-arr">→</span></div>
+      <div class="quick-link"><span class="quick-link-icon">🔑</span>View Answer Key<span class="quick-link-arr">→</span></div>
+      <div class="quick-link"><span class="quick-link-icon">✉️</span>Get Job Alerts<span class="quick-link-arr">→</span></div>
+    </div>
+
+    <div class="sidebar-card" style="background:linear-gradient(135deg,rgba(245,158,11,0.08),rgba(249,115,22,0.08)); border-color:rgba(245,158,11,0.2);">
+      <div style="font-size:2rem; margin-bottom:0.8rem;">📬</div>
+      <div style="font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; margin-bottom:0.4rem;">Get Job Alerts</div>
+      <p style="font-size:0.82rem; color:var(--muted); line-height:1.6; margin-bottom:1rem;">Never miss a notification. Get daily updates in your inbox.</p>
+      <input type="email" placeholder="Enter your email" style="width:100%; background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px 12px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.85rem; outline:none; margin-bottom:0.6rem;"/>
+      <button style="width:100%; background:var(--accent); border:none; border-radius:8px; padding:10px; color:#000; font-weight:700; cursor:pointer; font-size:0.85rem;">Subscribe Free →</button>
+    </div>
+  </aside>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><div class="logo-icon">🎯</div><span class="logo-text">Job<span>Zone</span></span></div>
+        <p>India's most trusted government job portal. Updated daily with the latest vacancies, results, and admit cards.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <a href="#">Latest Jobs</a>
+        <a href="#">Results</a>
+        <a href="#">Admit Cards</a>
+        <a href="#">Syllabus</a>
+        <a href="#">Answer Keys</a>
+      </div>
+      <div class="footer-col">
+        <h4>Top Exams</h4>
+        <a href="#">UPSC CSE</a>
+        <a href="#">SSC CGL</a>
+        <a href="#">RRB NTPC</a>
+        <a href="#">SBI PO</a>
+        <a href="#">IBPS Clerk</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">About Us</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Disclaimer</a>
+        <a href="admin.html">Admin Panel</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 JobZone India. All rights reserved.</p>
+      <p>Made with ❤️ for Govt Job Aspirants</p>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalBox">
+    <div class="modal-header">
+      <div class="modal-img" id="modalImg"></div>
+      <div class="modal-close" onclick="closeModalDirect()">✕</div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-cat" id="modalCat"></div>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-meta" id="modalMeta"></div>
+      <div class="modal-content" id="modalContent"></div>
+      <button class="apply-btn" onclick="closeModalDirect()">← Back to Listings</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== BLOG DATA =====
+const defaultBlogs = [
+  {
+    id:1, cat:'jobs', catLabel:'Latest Jobs', emoji:'💼',
+    title:'UPSC Civil Services 2026 — 979 Vacancies Notified',
+    excerpt:'Union Public Service Commission releases official notification for Civil Services Examination 2026 with 979 posts across IAS, IPS, IFS and allied services.',
+    date:'May 7, 2026', author:'Admin', readTime:'5 min', featured:true, hot:true,
+    content:`<h3>Overview</h3><p>The Union Public Service Commission (UPSC) has officially released the Civil Services Examination (CSE) 2026 notification. A total of <strong>979 vacancies</strong> have been announced across various Group A and Group B services.</p><h3>Important Dates</h3><table><tr><th>Event</th><th>Date</th></tr><tr><td>Notification Release</td><td>May 7, 2026</td></tr><tr><td>Last Date to Apply</td><td>May 27, 2026</td></tr><tr><td>Prelims Exam</td><td>June 8, 2026</td></tr><tr><td>Mains Exam</td><td>September 2026</td></tr></table><h3>Eligibility Criteria</h3><ul><li>Nationality: Indian Citizen</li><li>Age: 21–32 years (relaxation for reserved categories)</li><li>Education: Bachelor's degree from any recognized university</li><li>Attempts: General – 6, OBC – 9, SC/ST – unlimited till age limit</li></ul><h3>How to Apply</h3><p>Candidates can apply online through the official UPSC website at upsc.gov.in. The application fee is ₹100 for General/OBC candidates. SC/ST/Female/PH candidates are exempted.</p>`
+  },
+  {
+    id:2, cat:'results', catLabel:'Results', emoji:'📊',
+    title:'SSC CHSL 2025 Tier-I Final Result Declared — Check Cutoff',
+    excerpt:'Staff Selection Commission declares CHSL 2025 Tier-I result. Over 1.2 lakh candidates shortlisted for Tier-II examination starting July 2026.',
+    date:'May 6, 2026', author:'Admin', readTime:'3 min', hot:false, isNew:true,
+    content:`<h3>Result Overview</h3><p>The Staff Selection Commission (SSC) has declared the CHSL 2025 Tier-I result on May 6, 2026. Candidates can check their result on the official website ssc.gov.in.</p><h3>Category-wise Cutoff Marks</h3><table><tr><th>Category</th><th>Cutoff (out of 200)</th></tr><tr><td>UR</td><td>142.50</td></tr><tr><td>OBC</td><td>138.25</td></tr><tr><td>SC</td><td>128.00</td></tr><tr><td>ST</td><td>121.75</td></tr><tr><td>EWS</td><td>137.50</td></tr></table><h3>Next Steps</h3><ul><li>Shortlisted candidates will appear for Tier-II (Descriptive Paper)</li><li>Tier-II scheduled for July 13, 2026</li><li>Skill Test/Typing Test will follow for qualifying candidates</li></ul>`
+  },
+  {
+    id:3, cat:'admit', catLabel:'Admit Card', emoji:'🪪',
+    title:'RRB NTPC 2026 Admit Card Released — Direct Download Link',
+    excerpt:'Railway Recruitment Board releases admit card for NTPC 2026 CBT Phase 1. Exam begins May 20, 2026 across 400+ exam centers nationwide.',
+    date:'May 5, 2026', author:'Admin', readTime:'2 min', hot:false, isNew:true,
+    content:`<h3>Admit Card Details</h3><p>The Railway Recruitment Board (RRB) has released the admit card for NTPC 2026 CBT Phase 1. Candidates can download their admit card from the official RRB regional websites.</p><h3>How to Download</h3><ul><li>Visit your regional RRB website (e.g., rrbchennai.gov.in)</li><li>Click on "Download Admit Card – NTPC 2026"</li><li>Enter Registration Number and Date of Birth</li><li>Download and print the admit card</li></ul><h3>Exam Schedule</h3><table><tr><th>Phase</th><th>Date</th></tr><tr><td>CBT Phase 1</td><td>May 20 – June 10, 2026</td></tr><tr><td>CBT Phase 2</td><td>August 2026 (Tentative)</td></tr></table><h3>Documents to Carry</h3><ul><li>Printed admit card (A4 size)</li><li>Original Photo ID (Aadhaar/PAN/Passport)</li><li>Two recent passport-size photographs</li></ul>`
+  },
+  {
+    id:4, cat:'jobs', catLabel:'Latest Jobs', emoji:'🏦',
+    title:'SBI PO 2026 — 600 Probationary Officer Vacancies',
+    excerpt:'State Bank of India invites online applications for 600 Probationary Officer posts. Applications open till May 28, 2026.',
+    date:'May 4, 2026', author:'Admin', readTime:'4 min', hot:false, isNew:false,
+    content:`<h3>Vacancy Details</h3><p>State Bank of India (SBI) has released the Probationary Officer (PO) recruitment notification for 2026 with <strong>600 vacancies</strong>.</p><h3>Selection Process</h3><ul><li>Phase I: Preliminary Examination (Online)</li><li>Phase II: Main Examination (Online)</li><li>Phase III: Group Exercise & Interview</li></ul><h3>Salary</h3><p>Basic Pay: ₹41,960/- per month. Gross emoluments including DA, HRA and other allowances will be approximately ₹82,000/- per month in metro cities.</p><h3>Application Fee</h3><table><tr><th>Category</th><th>Fee</th></tr><tr><td>General/EWS/OBC</td><td>₹750</td></tr><tr><td>SC/ST/PH</td><td>₹0 (Exempted)</td></tr></table>`
+  },
+  {
+    id:5, cat:'syllabus', catLabel:'Syllabus', emoji:'📚',
+    title:'SSC CGL 2026 Syllabus & Exam Pattern — Complete Guide',
+    excerpt:'Detailed syllabus breakdown for SSC CGL 2026 Tier I and Tier II examinations including topic-wise weightage and recommended books.',
+    date:'May 3, 2026', author:'Admin', readTime:'8 min', hot:false, isNew:false,
+    content:`<h3>Exam Pattern Overview</h3><p>SSC CGL 2026 consists of two tiers. Here is the complete exam pattern and syllabus.</p><h3>Tier I Subjects</h3><ul><li><strong>General Intelligence & Reasoning:</strong> Analogies, Series, Coding-Decoding, Blood Relations, Syllogism</li><li><strong>General Awareness:</strong> History, Geography, Polity, Economics, Current Affairs, Science</li><li><strong>Quantitative Aptitude:</strong> Number System, Percentage, Profit-Loss, Algebra, Geometry, Trigonometry</li><li><strong>English Comprehension:</strong> Reading Comprehension, Grammar, Vocabulary, Error Detection</li></ul><h3>Recommended Books</h3><table><tr><th>Subject</th><th>Book</th><th>Author</th></tr><tr><td>Reasoning</td><td>A Modern Approach to Verbal & Non-Verbal Reasoning</td><td>R.S. Aggarwal</td></tr><tr><td>Quant</td><td>Quantitative Aptitude</td><td>R.S. Aggarwal</td></tr><tr><td>English</td><td>Objective General English</td><td>S.P. Bakshi</td></tr></table>`
+  },
+  {
+    id:6, cat:'answer', catLabel:'Answer Key', emoji:'🔑',
+    title:'IBPS Clerk 2025 Mains Official Answer Key Released',
+    excerpt:'IBPS releases official answer key for Clerk Mains 2025. Candidates can raise objections till May 10, 2026 at ₹50 per question.',
+    date:'May 2, 2026', author:'Admin', readTime:'2 min', hot:false, isNew:false,
+    content:`<h3>Answer Key Details</h3><p>The Institute of Banking Personnel Selection (IBPS) has released the official answer key for the Clerk Mains 2025 examination. The answer key is now available on the official website ibps.in.</p><h3>Objection Window</h3><ul><li>Objection period: May 7 – May 10, 2026</li><li>Fee per objection: ₹50 (refunded if objection is accepted)</li><li>Mode: Online only through ibps.in</li></ul><h3>How to Check</h3><ul><li>Visit ibps.in</li><li>Click on CRP Clerks – Answer Key link</li><li>Login with Registration Number and Password</li><li>View and download your answer key with responses</li></ul>`
+  },
+  {
+    id:7, cat:'results', catLabel:'Results', emoji:'🎓',
+    title:'NTA JEE Main 2026 Session 1 Result Out — Scorecard Download',
+    excerpt:'National Testing Agency declares JEE Main 2026 Session 1 result. 24 students achieve 100 percentile. Direct scorecard download link available.',
+    date:'May 1, 2026', author:'Admin', readTime:'3 min', hot:true, isNew:false,
+    content:`<h3>Result Highlights</h3><p>NTA has declared the JEE Main 2026 Session 1 Result. A total of <strong>24 candidates</strong> have achieved a perfect 100 percentile score.</p><h3>Statistics</h3><table><tr><th>Metric</th><th>Data</th></tr><tr><td>Total Applicants</td><td>12,75,847</td></tr><tr><td>Total Appeared</td><td>11,89,432</td></tr><tr><td>100 Percentilers</td><td>24</td></tr><tr><td>Qualifying Cutoff (GEN)</td><td>89.5 Percentile</td></tr></table><h3>How to Check Scorecard</h3><ul><li>Visit jeemain.nta.nic.in</li><li>Click on "View Result/Score Card"</li><li>Enter Application Number and Date of Birth</li><li>Download and save the scorecard</li></ul>`
+  },
+  {
+    id:8, cat:'admit', catLabel:'Admit Card', emoji:'🪪',
+    title:'UPSC CAPF 2026 Admit Card — AC Exam on June 1',
+    excerpt:'UPSC releases admit card for Central Armed Police Forces 2026 examination. Exam to be held on June 1, 2026 at designated centers.',
+    date:'April 30, 2026', author:'Admin', readTime:'2 min', hot:false, isNew:false,
+    content:`<h3>Exam Details</h3><p>UPSC has released the admit card for the Central Armed Police Forces (CAPF) Assistant Commandants 2026 examination scheduled for <strong>June 1, 2026</strong>.</p><h3>Download Steps</h3><ul><li>Visit upsc.gov.in</li><li>Click on "e-Admit Card"</li><li>Select CAPF (AC) 2026</li><li>Enter Registration ID and Date of Birth</li><li>Download the admit card</li></ul><h3>Exam Centers</h3><p>The exam will be held at 72 exam centers across India. Candidates must report at least 30 minutes before the exam time.</p>`
+  },
+];
+
+function getBlogs() {
+  const stored = localStorage.getItem('jz_blogs');
+  let all = defaultBlogs;
+  if (stored) {
+    const extra = JSON.parse(stored);
+    all = [...extra, ...defaultBlogs];
+  }
+  return all;
+}
+
+let currentFilter = 'all';
+
+function getCatClass(cat) {
+  return { jobs:'cat-jobs', results:'cat-results', admit:'cat-admit', syllabus:'cat-syllabus', answer:'cat-answer' }[cat] || 'cat-jobs';
+}
+
+function renderBlogs(blogs) {
+  const grid = document.getElementById('blogGrid');
+  const count = document.getElementById('countBadge');
+  count.textContent = blogs.length + ' posts';
+  if (!blogs.length) {
+    grid.innerHTML = '<div class="no-results" style="grid-column:1/-1"><div class="icon">🔍</div><p>No posts found. Try a different filter.</p></div>';
+    return;
+  }
+  grid.innerHTML = blogs.map((b, i) => `
+    <div class="blog-card ${i===0&&currentFilter==='all'?'featured':''}" style="animation-delay:${i*0.07}s" onclick="openModal(${b.id})">
+      <div class="card-img">
+        <div class="card-img-placeholder">${b.emoji}</div>
+        ${b.hot ? '<div class="hot-badge">🔥 Hot</div>' : b.isNew ? '<div class="new-badge">New</div>' : ''}
+      </div>
+      <div class="card-body">
+        <div class="card-cat ${getCatClass(b.cat)}">${b.catLabel}</div>
+        <div class="card-title">${b.title}</div>
+        <div class="card-excerpt">${b.excerpt}</div>
+        <div class="card-footer">
+          <div class="card-meta"><strong>${b.date}</strong> · ${b.readTime} read</div>
+          <span class="read-btn">Read More →</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterBlogs(cat, el) {
+  currentFilter = cat;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  const all = getBlogs();
+  const filtered = cat === 'all' ? all : all.filter(b => b.cat === cat);
+  renderBlogs(filtered);
+}
+
+function handleSearch(val) {
+  const all = getBlogs();
+  const q = val.toLowerCase();
+  const filtered = all.filter(b =>
+    b.title.toLowerCase().includes(q) ||
+    b.excerpt.toLowerCase().includes(q) ||
+    b.catLabel.toLowerCase().includes(q)
+  );
+  renderBlogs(filtered);
+}
+
+function openModal(id) {
+  const all = getBlogs();
+  const blog = all.find(b => b.id == id);
+  if (!blog) return;
+  document.getElementById('modalImg').textContent = blog.emoji;
+  document.getElementById('modalCat').innerHTML = `<div class="card-cat ${getCatClass(blog.cat)}">${blog.catLabel}</div>`;
+  document.getElementById('modalTitle').textContent = blog.title;
+  document.getElementById('modalMeta').innerHTML = `
+    <span>📅 ${blog.date}</span>
+    <span>⏱ ${blog.readTime} read</span>
+    <span>✍️ ${blog.author}</span>
+  `;
+  document.getElementById('modalContent').innerHTML = blog.content || blog.excerpt;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+}
+function closeModalDirect() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
+function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+
+// Initial render
+renderBlogs(getBlogs());
+
+// Listen for storage changes (from admin panel)
+window.addEventListener('storage', () => renderBlogs(getBlogs()));
+</script>
+</body>
+</html>
